@@ -1,0 +1,25 @@
+# build binary
+bin/
+/main
+/api
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Go Vendor & Test Cache
+vendor/
+*.out
+*.test
+
+.env
+.env.local
+.env.*
+!.env.example
+
+*.log
+
+.DS_Store
+.vscode/
+.idea/
