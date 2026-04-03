@@ -1,0 +1,20 @@
+# Python Cache & Bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Machine Learning Models (YOLO)
+*.pt
+*.weights
+*.onnx
+
+.env
+.env.local
+.env.*
+!.env.example
+
+*.log
+
+.DS_Store
+.vscode/
+.idea/
