@@ -14,6 +14,7 @@ Sistem gerbang cerdas yang mengintegrasikan teknologi RFID dan LPR (License Plat
 - **Frontend**: SvelteKit
 - **Backend**: Go (Fiber)
 - **Database**: Supabase
+- **AI Engine**: Python (Yolo, OpenCV, FastAPI)
 - **Infrastruktur**: Docker & Docker Compose
 
 ## Instalasi
@@ -34,8 +35,10 @@ Sistem gerbang cerdas yang mengintegrasikan teknologi RFID dan LPR (License Plat
 
 ```
 rfid-lpr-gate-system/
-├── backend/          # Aplikasi backend (Go)
-├── frontend/         # Aplikasi frontend (SvelteKit)
-├── docker-compose.yml  # Konfigurasi Docker
-└── README.md         # Dokumentasi ini
+├── ai-engine/
+├── backend/          
+├── client/         
+├── iot/                  
+├── docker-compose.yml  
+└── README.md         
 ```
