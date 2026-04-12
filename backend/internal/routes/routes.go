@@ -9,9 +9,9 @@ import (
 	"github.com/nedpals/supabase-go"
 )
 
-func SetupRoutes(app *fiber.App, db *supabase.Client) {
+func SetupRoutes(app *fiber.App, db *supabase.Client, aiServiceURL string) {
 	supabaseRepo := repositories.NewSupabaseRepo(db)
-	aiRepo := repositories.NewAIRepo("http://localhost:8000")
+	aiRepo := repositories.NewAIRepo(aiServiceURL)
 
 	gateService := services.NewGateService(supabaseRepo, aiRepo)
 	gateHandler := handlers.NewGateHandler(gateService)
