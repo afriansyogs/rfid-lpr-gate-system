@@ -1,0 +1,28 @@
+services:
+  ai-engine:
+    build: 
+      context: ./ai-engine
+    container_name: gate-ai
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    networks:
+      - gate-network
+
+  backend:
+    build: 
+      context: ./backend
+    container_name: gate-backend
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./backend/.env
+    restart: unless-stopped
+    networks:
+      - gate-network
+    depends_on:
+      - ai-engine
+
+networks:
+  gate-network:
+    driver: bridge
