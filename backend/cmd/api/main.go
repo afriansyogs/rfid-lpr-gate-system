@@ -20,13 +20,18 @@ func main() {
 
 	supabaseUrl := os.Getenv("SUPABASE_URL")
 	supabaseKey := os.Getenv("SUPABASE_ANON_KEY") 
+	aiServiceURL := os.Getenv("AI_SERVICE_URL")
+
+	if aiServiceURL == "" {
+		aiServiceURL = "http://localhost:8000" 
+	}
 	
 	sb := supabase.CreateClient(supabaseUrl, supabaseKey)
 	app := fiber.New()
 
 	app.Use(logger.New())
 
-	routes.SetupRoutes(app, sb)
+	routes.SetupRoutes(app, sb, aiServiceURL)
 
 	port := os.Getenv("PORT")
 	if port == "" {
