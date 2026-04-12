@@ -3,25 +3,32 @@ package handlers
 import (
 	"github.com/gofiber/fiber/v3"
 	"rfid-gateway/internal/dto"
-	"fmt"
+	"rfid-gateway/internal/services"
 )
 
-func HandleRfidTap(c fiber.Ctx) error {
+type GateHandler struct {
+	GateService *services.GateService
+}
+
+func NewGateHandler(gateService *services.GateService) *GateHandler {
+	return &GateHandler{GateService: gateService}
+}
+
+func (h *GateHandler) HandleTap(c fiber.Ctx) error {
 	var req dto.TapRequest
 
 	if err := c.Bind().JSON(&req); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(dto.ErrorResponse{
-			Status: "error",
-			Reason: "Format JSON not valid",
+			Status: "ERROR",
+			Reason: "Format JSON tidak valid",
 		})
 	}
 
-	fmt.Printf(">>> RFID Tap: [%s] from ESP32\n", req.RfidUUID)
+	response := h.GateService.ProcessTap(req)
 
-	return c.JSON(dto.TapResponse{
-		Status:    "success",
-		Action:    "hold",
-		RfidUUID: req.RfidUUID,
-		Message:   "Data received, waiting for AI logic...",
-	})
+	if response.Status == "DENIED" {
+		return c.Status(fiber.StatusForbidden).JSON(response)
+	}
+
+	return c.Status(fiber.StatusOK).JSON(response)
 }
