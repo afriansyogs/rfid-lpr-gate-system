@@ -19,41 +19,69 @@ func NewGateService(gateRepo *repositories.SupabaseRepo, aiRepo *repositories.AI
 }
 
 func (s *GateService) ProcessTap(req dto.TapRequest) dto.TapResponse {
-	member, err := s.GateRepo.GetMemberByUID(req.RfidUUID, req.GateType)
+	member, err := s.getMember(req)
 	if err != nil {
-		s.GateRepo.InsertLog(nil, req.RfidUUID, req.GateType, nil, "DENIED", "Akses Ditolak: Kartu Tidak Terdaftar")
-		return dto.TapResponse{
-			Status:   "DENIED",
-			Action:   "DO_NOTHING",
-			RfidUUID: req.RfidUUID,
-			Message:  "Kartu/Stiker tidak terdaftar",
-		}
+		return s.handleMemberNotFound(req)
 	}
-
-	aiPlatePtr := s.AIRepo.ScanPlate()
 
 	if req.GateType == "OUT" {
-		fmt.Println("Vehicle out, triggering AI camera...")
-		aiPlatePtr = s.AIRepo.ScanPlate()
-		
-		if aiPlatePtr != nil && *aiPlatePtr != member.PlatNomor {
-			s.GateRepo.InsertLog(&member.ID, req.RfidUUID, req.GateType, aiPlatePtr, "DENIED", "Plat Nomor Tidak Cocok")
-			return dto.TapResponse{ Status: "DENIED", Action: "DO_NOTHING", Message: "Plat nomor tidak valid" }
-		}
-	} else {
-		fmt.Println("Vehicle in via UHF, skipping AI scan.")
+		return s.handleGateOut(req, member)
 	}
+
+	return s.handleGateIn(req, member)
+}
+
+func (s *GateService) getMember(req dto.TapRequest) (*dto.Member, error) {
+	return s.GateRepo.GetMemberByUID(req.RfidUUID, req.GateType)
+}
+
+func (s *GateService) handleMemberNotFound(req dto.TapRequest) dto.TapResponse {
+	s.GateRepo.InsertLog(nil, req.RfidUUID, req.GateType, nil, "DENIED", "Akses Ditolak: Kartu Tidak Terdaftar")
+
+	return dto.TapResponse{
+		Status:   "DENIED",
+		Action:   "DO_NOTHING",
+		RfidUUID: req.RfidUUID,
+		Message:  "Kartu/Stiker tidak terdaftar",
+	}
+}
+
+func (s *GateService) handleGateIn(req dto.TapRequest, member *dto.Member) dto.TapResponse {
+	fmt.Println("Vehicle in via UHF, skipping AI scan.")
 
 	keterangan := "Akses Masuk Diberikan (UHF)"
-	if req.GateType == "OUT" {
-		keterangan = "Akses Keluar Diberikan (RFID)"
-	}
-	s.GateRepo.InsertLog(&member.ID, req.RfidUUID, req.GateType, aiPlatePtr, "GRANTED", keterangan)
+	s.GateRepo.InsertLog(&member.ID, req.RfidUUID, req.GateType, nil, "GRANTED", keterangan)
 
 	return dto.TapResponse{
 		Status:   "GRANTED",
 		Action:   "OPEN_GATE",
 		RfidUUID: req.RfidUUID,
 		Message:  fmt.Sprintf("Welcome, %s!", member.Nama),
+	}
+}
+
+func (s *GateService) handleGateOut(req dto.TapRequest, member *dto.Member) dto.TapResponse {
+	fmt.Println("Vehicle out, triggering AI camera...")
+
+	plate := s.AIRepo.ScanPlate()
+
+	if plate != nil && *plate != member.PlatNomor {
+		s.GateRepo.InsertLog(&member.ID, req.RfidUUID, req.GateType, plate, "DENIED", "Plat Nomor Tidak Cocok")
+
+		return dto.TapResponse{
+			Status:  "DENIED",
+			Action:  "DO_NOTHING",
+			Message: "Plat nomor tidak valid",
+		}
+	}
+
+	keterangan := "Akses Keluar Diberikan (RFID)"
+	s.GateRepo.InsertLog(&member.ID, req.RfidUUID, req.GateType, plate, "GRANTED", keterangan)
+
+	return dto.TapResponse{
+		Status:   "GRANTED",
+		Action:   "OPEN_GATE",
+		RfidUUID: req.RfidUUID,
+		Message:  fmt.Sprintf("Goodbye, %s!", member.Nama),
 	}
 }

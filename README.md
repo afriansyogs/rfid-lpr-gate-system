@@ -14,15 +14,16 @@ Sistem gerbang cerdas yang mengintegrasikan teknologi RFID dan LPR (License Plat
 - **Frontend**: SvelteKit
 - **Backend**: Go (Fiber)
 - **Database**: Supabase
-- **AI Engine**: Python (Yolo, OpenCV, FastAPI)
+- **AI Engine**: Python (EasyOCR, OpenCV, FastAPI)
 - **Infrastruktur**: Docker & Docker Compose
 
 ## Instalasi
 
-1. Clone repositori:
+1. Clone repositori & run project:
    ```bash
    git clone <repository-url>
    cd rfid-lpr-gate-system
+   docker compose up -d --build
    ```
 
 
