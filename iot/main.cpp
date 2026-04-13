@@ -16,8 +16,8 @@ WIEGAND wg;
 MFRC522 rfid(SS_PIN, RST_PIN);
 
 // module servo
-#define SERVO_GATE_IN 26
-#define SERVO_GATE_OUT 27
+#define RELAY_GATE_IN 26
+#define RELAY_GATE_OUT 27
 
 const char* ssid = "NAMA_WIFI";
 const char* password = "PASSWORD_WIFI";
@@ -27,10 +27,10 @@ const char* serverUrl = "http://192.168.1.xxx:3000/api/gate/tap";
 void setup() {
   Serial.begin(115200);
 
-  pinMode(SERVO_GATE_IN, OUTPUT);
-  pinMode(SERVO_GATE_OUT, OUTPUT);
-  digitalWrite(SERVO_GATE_IN, HIGH);
-  digitalWrite(SERVO_GATE_OUT, HIGH);
+  pinMode(RELAY_GATE_IN, OUTPUT);
+  pinMode(RELAY_GATE_OUT, OUTPUT);
+  digitalWrite(RELAY_GATE_IN, HIGH);
+  digitalWrite(RELAY_GATE_OUT, HIGH);
 
   WiFi.begin(ssid, password);
   Serial.print("Connecting to WiFi");
@@ -113,9 +113,9 @@ void sendToBackend(String gateType, String uid) {
 }
 
 void bukaGerbang(String gateType) {
-  int servoPin = (gateType == "IN") ? SERVO_GATE_IN : SERVO_GATE_OUT;
+  int relayPin = (gateType == "IN") ? RELAY_GATE_IN : RELAY_GATE_OUT;
   
-  digitalWrite(servoPin, LOW); 
-  delay(3000);                 
-  digitalWrite(servoPin, HIGH); 
+  digitalWrite(relayPin, LOW); 
+  delay(500);                 
+  digitalWrite(relayPin, HIGH); 
 }
