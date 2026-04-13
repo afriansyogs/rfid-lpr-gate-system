@@ -3,11 +3,21 @@
 #include <WiFi.h>
 #include <HTTPClient.h>
 #include <ArduinoJson.h>
+#include <Wiegand.h>
 
-#define SS_PIN 5
+// module UHF
+WIEGAND wg;
+#define PIN_WG_D0 4
+#define PIN_WG_D1 5
+
+// module RFID
+#define SS_PIN 21
 #define RST_PIN 22
-
 MFRC522 rfid(SS_PIN, RST_PIN);
+
+// module servo
+#define SERVO_GATE_IN 26
+#define SERVO_GATE_OUT 27
 
 const char* ssid = "NAMA_WIFI";
 const char* password = "PASSWORD_WIFI";
@@ -16,8 +26,11 @@ const char* serverUrl = "http://192.168.1.xxx:3000/api/gate/tap";
 
 void setup() {
   Serial.begin(115200);
-  SPI.begin();
-  rfid.PCD_Init();
+
+  pinMode(SERVO_GATE_IN, OUTPUT);
+  pinMode(SERVO_GATE_OUT, OUTPUT);
+  digitalWrite(SERVO_GATE_IN, HIGH);
+  digitalWrite(SERVO_GATE_OUT, HIGH);
 
   WiFi.begin(ssid, password);
   Serial.print("Connecting to WiFi");
@@ -26,47 +39,83 @@ void setup() {
     Serial.print(".");
   }
   Serial.println("\nConnected to WiFi!");
+
+  wg.begin(PIN_WG_D0, PIN_WG_D1);
+  Serial.println("UHF Wiegand initialized");
+
+  SPI.begin();
+  rfid.PCD_Init();
+  Serial.println("RFID initialized");
 }
 
 void loop() {
-  if (!rfid.PICC_IsNewCardPresent() || !rfid.PICC_ReadCardSerial()) {
+  if (WiFi.status() != WL_CONNECTED) {
     return;
   }
 
-  // take UID card and make it string
-  String uidString = "";
-  for (byte i = 0; i < rfid.uid.size; i++) {
-    uidString += String(rfid.uid.uidByte[i] < 0x10 ? "0" : "");
-    uidString += String(rfid.uid.uidByte[i], HEX);
+  // GATE IN UHF
+  if (wg.available()) {
+    String uid_uhf = String(wg.getCode(), HEX);
+    uid_uhf.toUpperCase();
+    Serial.println("UHF Sticker Detected! UID: " + uid_uhf);
+
+    sendToBackend("IN", uid_uhf);
   }
-  uidString.toUpperCase();
-  
-  Serial.println("Card Detected! UID: " + uidString);
 
-  // send to backend via HTTP POST
-  if (WiFi.status() == WL_CONNECTED) {
-    HTTPClient http;
-    http.begin(serverUrl);
-    http.addHeader("Content-Type", "application/json");
-
-    StaticJsonDocument<200> doc;
-    doc["rfid_uuid"] = uidString;
-    String requestBody;
-    serializeJson(doc, requestBody);
-
-    int httpResponseCode = http.POST(requestBody);
-
-    if (httpResponseCode > 0) {
-      String response = http.getString();
-      Serial.println("Response from backend: " + response);
-    } else {
-      Serial.print("Error POST: ");
-      Serial.println(httpResponseCode);
+  // GATE OUT RFID
+  if (rfid.PICC_IsNewCardPresent() && rfid.PICC_ReadCardSerial()) {
+    String uid_tap = "";
+    
+    for (byte i = 0; i < rfid.uid.size; i++) {
+      uid_tap += String(rfid.uid.uidByte[i] < 0x10 ? "0" : "");
+      uid_tap += String(rfid.uid.uidByte[i], HEX);
     }
-    http.end();
+
+    uid_tap.toUpperCase();
+    Serial.println("Card Detected! UID: " + uid_tap);
+
+    sendToBackend("OUT", uid_tap);
+
+    rfid.PICC_HaltA();
+  }
+}
+
+void sendToBackend(String gateType, String uid) {
+  HTTPClient http;
+  
+  Serial.println("test connect to backend...");
+  http.begin(serverUrl);
+  http.addHeader("Content-Type", "application/json");
+
+  // raw JSON
+  String payload = "{\"gate_type\":\"" + gateType + "\", \"rfid_uuid\":\"" + uid + "\"}";
+  
+  int httpResponseCode = http.POST(payload);
+
+  if (httpResponseCode > 0) {
+    String response = http.getString();
+    Serial.print("HTTP Response code: ");
+    Serial.println(httpResponseCode);
+    Serial.println("Response from backend: " + response);
+
+    if (response.indexOf("\"action\":\"OPEN_GATE\"") > 0) {
+      Serial.println("Akses Diterima. Membuka gerbang " + gateType + "...");
+      bukaGerbang(gateType);
+    } else {
+      Serial.println("Akses DITOLAK.");
+    }
+  } else {
+    Serial.print("Error POST API: ");
+    Serial.println(httpResponseCode);
   }
 
-  rfid.PICC_HaltA();
-  rfid.PCD_StopCrypto1();
-  delay(2000);
+  http.end();
+}
+
+void bukaGerbang(String gateType) {
+  int servoPin = (gateType == "IN") ? SERVO_GATE_IN : SERVO_GATE_OUT;
+  
+  digitalWrite(servoPin, LOW); 
+  delay(3000);                 
+  digitalWrite(servoPin, HIGH); 
 }
