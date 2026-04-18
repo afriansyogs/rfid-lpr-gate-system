@@ -1,0 +1,26 @@
+bin/
+dist/
+build/
+*.exe
+*.out
+
+vendor/
+
+# OS / system files
+.DS_Store
+Thumbs.db
+
+.vscode/
+.idea/
+
+*.log
+
+.env
+
+*.test
+
+.git/
+.gitignore
+
+tmp/
+temp/
