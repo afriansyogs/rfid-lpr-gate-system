@@ -19,6 +19,8 @@ vendor/
 !.env.example
 
 *.log
+tmp/
+temp/
 
 .DS_Store
 .vscode/
