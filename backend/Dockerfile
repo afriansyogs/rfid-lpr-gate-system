@@ -1,18 +1,10 @@
-FROM golang:alpine AS builder
+FROM golang:1.25
+
 WORKDIR /app
+
+RUN go install github.com/air-verse/air@latest
 
 COPY go.mod go.sum ./
 RUN go mod download
 
 COPY . .
-
-RUN go build -o gate-backend ./cmd/api/main.go
-
-FROM alpine:latest
-WORKDIR /app
-
-COPY --from=builder /app/gate-backend .
-
-EXPOSE 3000
-
-CMD ["./gate-backend"]
