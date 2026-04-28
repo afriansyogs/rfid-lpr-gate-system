@@ -1,14 +1,15 @@
 <script lang="ts">
 	import { HelpCircle, LayoutGrid, LogOut, Settings, History, Users, X } from 'lucide-svelte';
+	import { page } from '$app/state';
 
 	let { isOpen = $bindable(false), isCollapsed = $bindable(false) } = $props();
 	let mobileAwareCollapse = $derived(isCollapsed && !isOpen);
 
 	const navItems = [
-		{ name: 'Dashboard', icon: LayoutGrid, href: '/', active: true },
-		{ name: 'Members', icon: Users, href: '/members', active: false },
-		{ name: 'Activity Logs', icon: History, href: '/logs', active: false },
-		{ name: 'Settings', icon: Settings, href: '/settings', active: false }
+		{ name: 'Dashboard', icon: LayoutGrid, href: '/' },
+		{ name: 'Members', icon: Users, href: '/members' },
+		{ name: 'Activity Logs', icon: History, href: '/logs' },
+		{ name: 'Settings', icon: Settings, href: '/settings' }
 	];
 </script>
 
@@ -36,14 +37,15 @@
 
 	<nav class="flex-1 space-y-1 px-4 py-6">
 		{#each navItems as item}
+			{@const isActive = page.url.pathname === item.href}
 			<a
 				href={item.href}
 				title={mobileAwareCollapse ? item.name : undefined}
-				class="group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {mobileAwareCollapse ? 'justify-center px-0' : ''} {item.active
+				class="group flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors {mobileAwareCollapse ? 'justify-center px-0' : ''} {isActive
 					? 'bg-blue-50/50 text-primary relative after:absolute after:left-0 after:top-1/2 after:h-8 after:w-1 after:-translate-y-1/2 after:rounded-r-md after:bg-primary'
 					: 'text-muted-foreground hover:bg-muted hover:text-foreground'}"
 			>
-				<item.icon class="h-5 w-5 shrink-0 {item.active ? 'text-primary' : 'text-neutral'}" />
+				<item.icon class="h-5 w-5 shrink-0 {isActive ? 'text-primary' : 'text-neutral'}" />
 				{#if !mobileAwareCollapse}
 				<span class="truncate">{item.name}</span>
 				{/if}
