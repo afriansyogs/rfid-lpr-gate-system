@@ -27,15 +27,6 @@
 	</button>
 
 	<div class="flex flex-1 items-center gap-4 min-w-0">
-		<div class="relative w-full max-w-md hidden sm:block">
-			<Search class="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-			<input
-				type="search"
-				bind:value={searchQuery}
-				placeholder="Search plates, members..."
-				class="h-9 w-full rounded-md border-0 bg-secondary/10 pl-9 pr-4 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-			/>
-		</div>
 		<button class="sm:hidden p-2 text-muted-foreground hover:bg-muted rounded text-foreground">
 			<Search class="h-5 w-5" />
 		</button>

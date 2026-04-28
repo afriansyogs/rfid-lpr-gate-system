@@ -8,7 +8,7 @@
 	const loadDashboardData = () => new Promise(resolve => setTimeout(resolve, 500));
 </script>
 
-<div class="mx-auto max-w-7xl flex-1 flex flex-col pt-2 pb-10">
+<div class="mx-auto max-w-8xl flex-1 flex flex-col pt-2 pb-10">
 	<div class="flex flex-col sm:flex-row items-start sm:items-end justify-between mb-8 gap-4">
 		<div>
 			<h1 class="text-2xl font-semibold text-foreground tracking-tight">Dashboard LPR Parking</h1>
