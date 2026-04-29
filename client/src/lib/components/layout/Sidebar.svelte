@@ -9,7 +9,6 @@
 		{ name: 'Dashboard', icon: LayoutGrid, href: '/' },
 		{ name: 'Members', icon: Users, href: '/members' },
 		{ name: 'Activity Logs', icon: History, href: '/logs' },
-		{ name: 'Settings', icon: Settings, href: '/settings' }
 	];
 </script>
 
@@ -21,7 +20,7 @@
 	<div class="flex h-16 shrink-0 items-center justify-between px-4 {mobileAwareCollapse ? 'justify-center' : ''}">
 		<div class="flex items-center gap-3 {mobileAwareCollapse ? 'justify-center' : ''}">
 			<div class="flex h-8 w-8 shrink-0 items-center justify-center rounded bg-primary text-primary-foreground font-bold">
-				P
+				L
 			</div>
 			{#if !mobileAwareCollapse}
 			<div class="flex flex-col">
@@ -66,7 +65,7 @@
 		</a>
 		<button
 			title={mobileAwareCollapse ? 'Sign Out' : undefined}
-			class="flex w-full items-center {mobileAwareCollapse ? 'justify-center px-0' : 'justify-center px-3'} gap-3 rounded-md py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+			class="cursor-pointer flex w-full items-center {mobileAwareCollapse ? 'justify-center px-0' : 'justify-center px-3'} gap-3 rounded-md py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
 		>
 			<LogOut class="h-5 w-5 text-neutral shrink-0" />
 			{#if !mobileAwareCollapse}

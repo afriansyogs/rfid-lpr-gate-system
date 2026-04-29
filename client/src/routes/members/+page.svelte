@@ -24,7 +24,7 @@
 <div class="mx-auto max-w-8xl flex-1 flex flex-col pt-2 pb-10">
 	<div class="flex items-center justify-between mb-8">
 		<h1 class="text-2xl font-semibold text-foreground tracking-tight">Members</h1>
-		<button class="bg-[#2563EB] text-white px-4 py-2.5 rounded-md font-medium text-sm flex items-center gap-2 hover:bg-blue-700 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
+		<button class="cursor-pointer bg-[#2563EB] text-white px-4 py-2.5 rounded-md font-medium text-sm flex items-center gap-2 hover:bg-blue-700 transition-colors shadow-sm focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2">
 			<Plus class="w-4 h-4" /> Add Member
 		</button>
 	</div>
