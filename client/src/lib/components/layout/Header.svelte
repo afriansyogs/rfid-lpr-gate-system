@@ -18,11 +18,11 @@
 
 <header class="flex h-16 w-full shrink-0 items-center justify-between border-b border-border bg-background px-4 md:px-6">
 	<!-- Mobile Menu Toggle -->
-	<button class="inline-flex md:hidden mr-4 p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md" onclick={() => sidebarOpen = true}>
+	<button class="cursor-pointer inline-flex md:hidden mr-4 p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md" onclick={() => sidebarOpen = true}>
 		<Menu class="h-5 w-5" />
 	</button>
 	<!-- Tablet/Desktop Toggle -->
-	<button class="hidden md:inline-flex mr-4 p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md" onclick={() => sidebarCollapsed = !sidebarCollapsed}>
+	<button class="cursor-pointer hidden md:inline-flex mr-4 p-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md" onclick={() => sidebarCollapsed = !sidebarCollapsed}>
 		<Menu class="h-5 w-5" />
 	</button>
 
