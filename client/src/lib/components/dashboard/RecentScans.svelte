@@ -44,7 +44,7 @@
 			<h3 class="text-sm font-semibold text-foreground">Recent Scans</h3>
 			<span class="text-xs text-muted-foreground">Live LPR feed</span>
 		</div>
-		<button class="rounded-md p-2 hover:bg-muted text-primary transition-colors">
+		<button class="rounded-md p-2 hover:bg-muted text-primary transition-colors cursor-pointer">
 			<RotateCcw class="h-4 w-4" />
 		</button>
 	</div>
