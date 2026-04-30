@@ -1,0 +1,20 @@
+{
+  "recentScans": [
+    { "id": "1", "plate": "XYZ - 8992", "type": "IN", "time": "Just now", "gate": "Gate A", "image": "https://placehold.co/80x40/333/fff?text=XYZ+8992" },
+    { "id": "2", "plate": "LMN - 4410", "type": "OUT", "time": "2 min ago", "gate": "Gate C", "image": "https://placehold.co/80x40/333/fff?text=LMN+4410" },
+    { "id": "3", "plate": "ABC - 1234", "type": "IN", "time": "5 min ago", "gate": "Gate B", "image": "https://placehold.co/80x40/333/fff?text=ABC+1234" }
+  ],
+  "members": [
+    { "name": "Sarah Jenkins", "plate": "ABC - 1234", "rfid": "RFID-7712", "uhf": "UHF-0988" },
+    { "name": "Marcus Chen", "plate": "XYZ - 9876", "rfid": "RFID-4421", "uhf": "UHF-3310" },
+    { "name": "Elena Rodriguez", "plate": "LMN - 4567", "rfid": "RFID-8890", "uhf": "UHF-1122" },
+    { "name": "David Kim", "plate": "PQR - 3321", "rfid": "RFID-1029", "uhf": "UHF-7754" },
+    { "name": "Aisha Patel", "plate": "STU - 8899", "rfid": "RFID-5566", "uhf": "UHF-9001" }
+  ],
+  "logs": [
+    { "name": "Sarah Jenkins", "image": "https://placehold.co/80x40/333/fff?text=XYZ+8992", "plate": "CA-9X3T2", "rfid": "RFID-7712", "uhf": "UHF-0988", "status": "IN", "description": "Authorized Entry", "timestamp": "Oct 24, 2023 • 14:32:01" },
+    { "name": "Marcus Chen", "image": "https://placehold.co/80x40/333/fff?text=LMN+4410", "plate": "NY-77B12", "rfid": "RFID-4421", "uhf": "UHF-3310", "status": "OUT", "description": "Regular Exit", "timestamp": "Oct 24, 2023 • 14:15:44" },
+    { "name": "Elena Rodriguez", "image": "https://placehold.co/80x40/333/fff?text=ABC+1234", "plate": "TX-LMNOP", "rfid": "RFID-8890", "uhf": "UHF-1122", "status": "IN", "description": "VIP Entry", "timestamp": "Oct 24, 2023 • 13:58:12" },
+    { "name": "David Kim", "image": "https://placehold.co/80x40/333/fff?text=XYZ+8992", "plate": "WA-552XX", "rfid": "RFID-1029", "uhf": "UHF-7754", "status": "OUT", "description": "Late Departure", "timestamp": "Oct 24, 2023 • 13:45:00" }
+  ]
+}

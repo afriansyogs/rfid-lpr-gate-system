@@ -3,9 +3,18 @@
 	import VehicleFlow from '$lib/components/dashboard/VehicleFlow.svelte';
 	import RecentScans from '$lib/components/dashboard/RecentScans.svelte';
 	import { Download, Plus } from 'lucide-svelte';
+	import EntryModal from '$lib/components/shared/EntryModal.svelte';
+	import type { EntryFormData } from '$lib/types';
 
 	// delay for skeleton loading state
 	const loadDashboardData = () => new Promise(resolve => setTimeout(resolve, 500));
+
+	let isEntryModalOpen = $state(false);
+
+	function handleSaveEntry(data: EntryFormData) {
+		console.log('Saved entry:', data);
+		isEntryModalOpen = false;
+	}
 </script>
 
 <div class="mx-auto max-w-8xl flex-1 flex flex-col pt-2 pb-10">
@@ -22,7 +31,8 @@
 				Export
 			</button>
 			<button
-				class="flex flex-1 sm:flex-none justify-center items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 shadow-sm transition-colors"
+				onclick={() => isEntryModalOpen = true}
+				class="flex flex-1 sm:flex-none justify-center items-center gap-2 rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 shadow-sm transition-colors cursor-pointer"
 			>
 				<Plus class="h-4 w-4" />
 					Entry
@@ -59,3 +69,11 @@
 		</div>
 	{/await}
 </div>
+
+<EntryModal 
+	isOpen={isEntryModalOpen} 
+	title="Add Member" 
+	type="member"
+	onClose={() => isEntryModalOpen = false} 
+	onSave={handleSaveEntry} 
+/>

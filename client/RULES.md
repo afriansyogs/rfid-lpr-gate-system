@@ -16,6 +16,7 @@ A professional, high-performance monitoring dashboard for smart parking staff. I
 - **Route-Based Logic:** Use `+page.svelte` for layout and `+page.ts/server.ts` for data fetching (smooth integration with the Golang REST API).
 - **Runes Only:** Use `$state`, `$derived`, `$props`, and `$effect` for reactivity. Avoid the old `export let` syntax.
 - **No Side Effects in Templates:** Keep logic inside `<script>` tags; templates should be declarative.
+- **Build with a clean architecture**
 
 ## 2. Strict TypeScript Rules
 - **Zero 'any' Policy:** Never use `any`. If a type is unknown, use `unknown` and type guards.

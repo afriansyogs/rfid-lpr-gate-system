@@ -1,41 +1,18 @@
 <script lang="ts">
 	import { RotateCcw } from 'lucide-svelte';
 
-	interface Scan {
-		id: string;
-		plate: string;
-		type: 'IN' | 'OUT';
-		time: string;
-		gate: string;
-		image: string;
-	}
+	import dummyData from '$lib/data/dummy.json';
+	import type { Scan } from '$lib/types';
 
-	let scans = $state<Scan[]>([
-		{
-			id: '1',
-			plate: 'XYZ - 8992',
-			type: 'IN',
-			time: 'Just now',
-			gate: 'Gate A',
-			image: 'https://placehold.co/80x40/333/fff?text=XYZ+8992'
-		},
-		{
-			id: '2',
-			plate: 'LMN - 4410',
-			type: 'OUT',
-			time: '2 min ago',
-			gate: 'Gate C',
-			image: 'https://placehold.co/80x40/333/fff?text=LMN+4410'
-		},
-		{
-			id: '3',
-			plate: 'ABC - 1234',
-			type: 'IN',
-			time: '5 min ago',
-			gate: 'Gate B',
-			image: 'https://placehold.co/80x40/333/fff?text=ABC+1234'
-		}
-	]);
+	let scans = $state<Scan[]>(dummyData.recentScans as Scan[]);
+	let isLoading = $state(false);
+
+	function handleRefresh() {
+		isLoading = true;
+		setTimeout(() => {
+			isLoading = false;
+		}, 500);
+	}
 </script>
 
 <div class="flex h-full flex-col rounded-xl border border-border bg-card shadow-sm">
@@ -44,14 +21,32 @@
 			<h3 class="text-sm font-semibold text-foreground">Recent Scans</h3>
 			<span class="text-xs text-muted-foreground">Live LPR feed</span>
 		</div>
-		<button class="rounded-md p-2 hover:bg-muted text-primary transition-colors cursor-pointer">
-			<RotateCcw class="h-4 w-4" />
+		<button 
+			class="rounded-md p-2 hover:bg-muted text-primary transition-colors cursor-pointer disabled:opacity-50"
+			onclick={handleRefresh}
+			disabled={isLoading}
+		>
+			<RotateCcw class="h-4 w-4 {isLoading ? 'animate-spin' : ''}" />
 		</button>
 	</div>
 
 	<div class="flex-1 overflow-y-auto p-6 space-y-6">
-		{#each scans as scan (scan.id)}
-			<div class="flex items-center justify-between gap-4">
+		{#if isLoading}
+			{#each [1, 2, 3] as _}
+				<div class="flex items-center justify-between gap-4 animate-pulse">
+					<div class="flex items-center gap-4">
+						<div class="h-12 w-20 rounded bg-muted"></div>
+						<div class="flex flex-col gap-2">
+							<div class="h-4 w-24 rounded bg-muted"></div>
+							<div class="h-3 w-32 rounded bg-muted"></div>
+						</div>
+					</div>
+					<div class="h-6 w-12 rounded bg-muted"></div>
+				</div>
+			{/each}
+		{:else}
+			{#each scans as scan (scan.id)}
+				<div class="flex items-center justify-between gap-4">
 				<div class="flex items-center gap-4">
 					<div class="h-12 w-20 overflow-hidden rounded bg-black">
 						<!-- plate image -->
@@ -77,6 +72,7 @@
 				</div>
 			</div>
 		{/each}
+		{/if}
 	</div>
 
 	<div class="border-t border-border p-4">
