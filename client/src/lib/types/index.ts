@@ -24,4 +24,6 @@ export interface Scan {
 export interface EntryFormData extends Member {
 	status?: 'IN' | 'OUT';
 	description?: string;
+	timestamp?: string;
+	image?: string;
 }
