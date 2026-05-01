@@ -21,6 +21,7 @@ A professional, high-performance monitoring dashboard for smart parking staff. I
 ## 2. Strict TypeScript Rules
 - **Zero 'any' Policy:** Never use `any`. If a type is unknown, use `unknown` and type guards.
 - **Interfaces & Types:** Define clear interfaces for LPR logs, Member data, and IoT sensor states mapping the Golang backend JSON responses.
+- **Generic & Utility Types:** Maximize type reusability by utilizing Generic Types and TypeScript built-in utilities (`Pick`, `Omit`, `Partial`, `Record`, etc.) instead of declaring redundant new interfaces. Deriving types from existing base interfaces is highly preferred (e.g., using `Omit<Member, 'id'>` for a creation payload).
 - **Zod Validation:** Use Zod for all form schemas (Login, Member CRUD) and API response validation.
 - **Prop Typing:** All component props must be explicitly typed using TypeScript interfaces.
 

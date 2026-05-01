@@ -72,8 +72,8 @@
 
 <EntryModal 
 	isOpen={isEntryModalOpen} 
-	title="Add Member" 
-	type="member"
+	title="Add Log" 
+	type="log"
 	onClose={() => isEntryModalOpen = false} 
 	onSave={handleSaveEntry} 
 />
