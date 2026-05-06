@@ -56,7 +56,7 @@ func (s *GateService) handleGateIn(req dto.TapRequest, member *dto.Member) dto.T
 		Status:   "GRANTED",
 		Action:   "OPEN_GATE",
 		RfidUUID: req.RfidUUID,
-		Message:  fmt.Sprintf("Welcome, %s!", member.Nama),
+		Message:  fmt.Sprintf("Welcome, %s!", member.Name),
 	}
 }
 
@@ -65,7 +65,7 @@ func (s *GateService) handleGateOut(req dto.TapRequest, member *dto.Member) dto.
 
 	plate := s.AIRepo.ScanPlate()
 
-	if plate != nil && *plate != member.PlatNomor {
+	if plate != nil && *plate != member.Plate {
 		s.GateRepo.InsertLog(&member.ID, req.RfidUUID, req.GateType, plate, "DENIED", "Plat Nomor Tidak Cocok")
 
 		return dto.TapResponse{
@@ -82,6 +82,6 @@ func (s *GateService) handleGateOut(req dto.TapRequest, member *dto.Member) dto.
 		Status:   "GRANTED",
 		Action:   "OPEN_GATE",
 		RfidUUID: req.RfidUUID,
-		Message:  fmt.Sprintf("Goodbye, %s!", member.Nama),
+		Message:  fmt.Sprintf("Goodbye, %s!", member.Name),
 	}
 }

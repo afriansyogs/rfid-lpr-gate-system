@@ -26,4 +26,7 @@ func SetupRoutes(app *fiber.App, db *supabase.Client, aiServiceURL string) {
 	})
 
 	api.Post("/gate/tap", gateHandler.HandleTap)
+
+	SetupMemberRoutes(api, supabaseRepo)
+	SetupLogsRoutes(api, supabaseRepo)
 }
